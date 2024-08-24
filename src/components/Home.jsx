@@ -1,7 +1,9 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { Button, Offcanvas } from 'react-bootstrap';
 import { Book, Trophy, Lightbulb } from 'lucide-react';
+import FadeTransition from './question/FadeTransition';
 
-const Button = ({ children, primary = false, ...props }) => (
+const CustomButton = ({ children, primary = false, ...props }) => (
   <button
     {...props}
     style={{
@@ -52,13 +54,21 @@ const IconWrapper = ({ children }) => (
 );
 
 function Home() {
+  const [showOffcanvas, setShowOffcanvas] = useState(false);
+
+  const handleClose = () => setShowOffcanvas(false);
+  const handleShow = () => setShowOffcanvas(true);
+
   return (
+    
     <div style={{ fontFamily: 'Arial, sans-serif', color: '#333', lineHeight: 1.6 }}>
       {/* Hero Section */}
       <header style={{ backgroundColor: '#3b82f6', color: 'white', textAlign: 'center', padding: '4rem 2rem' }}>
         <h1 style={{ fontSize: '3rem', marginBottom: '1rem' }}>Welcome to BIT Quiz Master</h1>
         <p style={{ fontSize: '1.2rem', marginBottom: '2rem' }}>Test your knowledge, challenge your friends, and learn something new every day!</p>
-        <Button primary>Start Quizzing Now</Button>
+        <CustomButton primary onClick={handleShow}>
+          Start Quizzing Now
+        </CustomButton>
       </header>
 
       {/* Features Section */}
@@ -93,10 +103,9 @@ function Home() {
       <section style={{ backgroundColor: '#eff6ff', padding: '4rem 2rem', textAlign: 'center' }}>
         <h2 style={{ color: '#2563eb', marginBottom: '1rem' }}>Ready to Put Your Knowledge to the Test?</h2>
         <p style={{ marginBottom: '2rem' }}>Join thousands of quiz enthusiasts and start your journey today!</p>
-		<Button primary onClick={() => window.location.href = '/Register'}>
-  Sign Up for Free
-</Button>
-
+        <CustomButton primary onClick={() => window.location.href = '/Register'}>
+          Sign Up for Free
+        </CustomButton>
       </section>
 
       {/* Testimonial Section */}
@@ -119,7 +128,49 @@ function Home() {
           </div>
         </div>
       </footer>
+
+      {/* Offcanvas */}
+      <Offcanvas
+  show={showOffcanvas}
+  onHide={handleClose}
+  style={{ 
+    position: 'fixed',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    width: '90%',
+    maxWidth: '500px',
+    height: 'auto',
+    margin: '0',
+    padding: '20px',
+    transition: 'opacity 0.3s ease-in-out, transform 0.3s ease-in-out', // Fixed this line
+    opacity: showOffcanvas ? 1 : 0,
+    transform: showOffcanvas ? 'translate(-50%, -50%) scale(1)' : 'translate(-50%, -50%) scale(0.8)',
+  }}
+>
+
+        <Offcanvas.Header closeButton>
+          <Offcanvas.Title>Connect With Us..</Offcanvas.Title>
+        </Offcanvas.Header>
+        <Offcanvas.Body>
+          <p>Please select your role to proceed with and sign-up as Student or Admin.</p>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', alignItems: 'center' }}>
+  <CustomButton primary onClick={() => window.location.href = '/Register'}>
+    User Sign Up
+  </CustomButton>
+  
+  <CustomButton primary onClick={() => window.location.href = '/Register'}>
+    Admin Sign Up
+  </CustomButton>
+</div>
+
+  
+        </Offcanvas.Body>
+      </Offcanvas>
+      
     </div>
+    
+ 
   );
 }
 

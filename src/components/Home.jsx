@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Button, Offcanvas } from 'react-bootstrap';
 import { Book, Trophy, Lightbulb } from 'lucide-react';
+import FadeTransition from './question/FadeTransition';
 
 const CustomButton = ({ children, primary = false, ...props }) => (
   <button
@@ -59,6 +60,7 @@ function Home() {
   const handleShow = () => setShowOffcanvas(true);
 
   return (
+    
     <div style={{ fontFamily: 'Arial, sans-serif', color: '#333', lineHeight: 1.6 }}>
       {/* Hero Section */}
       <header style={{ backgroundColor: '#3b82f6', color: 'white', textAlign: 'center', padding: '4rem 2rem' }}>
@@ -165,7 +167,10 @@ function Home() {
   
         </Offcanvas.Body>
       </Offcanvas>
+      
     </div>
+    
+ 
   );
 }
 

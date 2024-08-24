@@ -64,6 +64,18 @@ export const getQuestionById = async(id) =>{
   }
 }
 
+
+export const saveStudent = async (studentData) => {
+  try {
+    const response = await api.post("/student/saveStudent", studentData);
+    return response.data;
+  } catch (error) {
+    console.error("Error saving student:", error);
+
+  }
+};
+
+
 export const deleteQuestion = async(id) =>{
   try {
     const response = await api.delete(`/question/${id}/delete`)
@@ -71,4 +83,6 @@ export const deleteQuestion = async(id) =>{
   } catch (error) {
     console.error(error)
   }
+
+  
 }

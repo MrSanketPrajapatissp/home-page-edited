@@ -19,6 +19,7 @@ function Register() {
     email: '',
     prn_no: '',
     roll_no: '',
+    password:'',
     subscribe: false,
   });
 
@@ -41,18 +42,22 @@ function Register() {
     if (!student.prn_no) newErrors.prn_no = 'PRN is required';
     else if (student.prn_no <= 0) newErrors.prn_no = 'PRN should be a positive number';
     if (!student.roll_no) newErrors.roll_no = 'Roll Number is required';
+    if(!student.password) newErrors.password = 'Password is required';
+    else if(student.password.length<8)newErrors.password = 'Password must contain at least 8 character'
     return newErrors;
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+  
     const validationErrors = validateFields();
     if (Object.keys(validationErrors).length > 0) {
       setErrors(validationErrors);
       return;
     }
-
+  
+    console.log('Submitting student data:', student);
+  
     setIsSubmitting(true);
     try {
       const response = await saveStudent(student);
@@ -64,6 +69,7 @@ function Register() {
           email: '',
           prn_no: '',
           roll_no: '',
+          password: '',
           subscribe: false,
         });
         setErrors({});
@@ -71,19 +77,20 @@ function Register() {
         alert('Failed to register student. Please try again.');
       }
     } catch (error) {
+      console.error('Error during submission:', error);
       alert('An error occurred while saving the student. Please try again.');
     } finally {
       setIsSubmitting(false);
     }
   };
-
+  
   return (
     <MDBContainer fluid>
       <MDBCard className='text-black m-5' style={{ borderRadius: '25px' }}>
         <MDBCardBody>
           <MDBRow>
             <MDBCol md='10' lg='6' className='order-2 order-lg-1 d-flex flex-column align-items-center'>
-              <p className="text-center h1 fw-bold mb-5 mx-1 mx-md-4 mt-4">Sign up</p>
+              <p className="text-center h1 fw-bold mb-5 mx-1 mx-md-4 mt-4">Student Sign Up</p>
 
               <div className="d-flex flex-row align-items-center mb-4">
                 <MDBIcon fas icon="user" size='lg' className="me-3" />
@@ -141,6 +148,19 @@ function Register() {
               </div>
               {errors.roll_no && <p className="text-danger">{errors.roll_no}</p>}
 
+              <div className="d-flex flex-row align-items-center mb-4">
+                <MDBIcon fas icon="address-card" size='lg' className="me-3" />
+                <MDBInput
+                  label='Password'
+                  id='form5'
+                  type='text'
+                  name='password'
+                  value={student.password}
+                  onChange={handleChange}
+                  className={`${errors.password ? 'border border-danger' : ''}`}
+                />
+              </div>
+              {errors.password && <p className="text-danger">{errors.password}</p>}
               <div className='mb-4'>
                 <MDBCheckbox
                   name='subscribe'
@@ -148,7 +168,7 @@ function Register() {
                   checked={student.subscribe}
                   onChange={handleChange}
                   id='flexCheckDefault'
-                  label='Subscribe to our newsletter'
+                  label='Accept All Terms And Conditions'
                 />
               </div>
 

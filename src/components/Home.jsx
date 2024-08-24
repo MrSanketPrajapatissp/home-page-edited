@@ -129,28 +129,40 @@ function Home() {
 
       {/* Offcanvas */}
       <Offcanvas
-        show={showOffcanvas}
-        onHide={handleClose}
-        style={{ 
-          position: 'fixed',
-          top: '50%',
-          left: '50%',
-          transform: 'translate(-50%, -50%)',
-          width: '90%',
-          maxWidth: '500px',
-          height: 'auto',
-          margin: '0',
-          padding: '20px',
-          transition: 'opacity 0.3s ease-in-out, transform 0.3s ease-in-out',
-          opacity: showOffcanvas ? 1 : 0,
-          transform: showOffcanvas ? 'translate(-50%, -50%) scale(1)' : 'translate(-50%, -50%) scale(0.8)',
-        }}
-      >
+  show={showOffcanvas}
+  onHide={handleClose}
+  style={{ 
+    position: 'fixed',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    width: '90%',
+    maxWidth: '500px',
+    height: 'auto',
+    margin: '0',
+    padding: '20px',
+    transition: 'opacity 0.3s ease-in-out, transform 0.3s ease-in-out', // Fixed this line
+    opacity: showOffcanvas ? 1 : 0,
+    transform: showOffcanvas ? 'translate(-50%, -50%) scale(1)' : 'translate(-50%, -50%) scale(0.8)',
+  }}
+>
+
         <Offcanvas.Header closeButton>
-          <Offcanvas.Title>Get Started</Offcanvas.Title>
+          <Offcanvas.Title>Connect With Us..</Offcanvas.Title>
         </Offcanvas.Header>
         <Offcanvas.Body>
-          <p>Welcome to BIT Quiz Master! Get ready to dive into quizzes and test your knowledge.</p>
+          <p>Please select your role to proceed with and sign-up as Student or Admin.</p>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', alignItems: 'center' }}>
+  <CustomButton primary onClick={() => window.location.href = '/Register'}>
+    User Sign Up
+  </CustomButton>
+  
+  <CustomButton primary onClick={() => window.location.href = '/Register'}>
+    Admin Sign Up
+  </CustomButton>
+</div>
+
+  
         </Offcanvas.Body>
       </Offcanvas>
     </div>

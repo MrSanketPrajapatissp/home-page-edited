@@ -4,9 +4,9 @@ import { NavLink } from "react-router-dom"
 const Navbar = () => {
 	return (
 		<nav className="navbar navbar-expand-lg bg-body-tertiary px-5 shadow sticky-top">
-			<div className="container-fluid">
+			<div className="container-fluid" >
 				<NavLink className="navbar-brand" to={"/"}>
-					Online Quiz App
+				BIT Quiz Master
 				</NavLink>
 				<button
 					className="navbar-toggler"

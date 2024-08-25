@@ -21,6 +21,7 @@
     "react-icons": "^4.12.0",
     "react-router-dom": "^6.20.1",
     "react-transition-group": "^4.4.5",
+    "styled-components": "^6.1.12",
     "tailwind": "^4.0.0"
   },
   "devDependencies": {

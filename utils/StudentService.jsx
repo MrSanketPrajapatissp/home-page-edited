@@ -15,6 +15,16 @@ export const saveStudent = async (studentData) => {
     throw error; // Re-throw error to handle it in the UI
   }
 };
+export const loginpage = async () => {
+  try {
+    const response = await studentApi.get("/logins");
+    return response.data;
+  } catch (error) {
+    console.error("Error login:", error);
+    return [];
+  }
+};
+
 
 
 export const getAllStudents = async () => {

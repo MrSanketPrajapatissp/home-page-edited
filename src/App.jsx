@@ -11,6 +11,7 @@ import UpdateQuestion from "./components/question/UpdateQuestion"
 import Navbar from "./components/layout/NavBar"
 import Admin from "./components/Admin"
 import Register from "./components/question/Register"
+import LoginPage from "../utils/LoginPage"
 
 function App() {
 	return (
@@ -19,6 +20,7 @@ function App() {
 				<Navbar />
 				<Routes>
 					<Route path="/" element={<Home />} />
+					<Route path="Login-Page" element={<LoginPage/>}/>
 					<Route path="/quiz-stepper" element={<QuizStepper />} />
 					<Route path="/take-quiz" element={<Quiz />} />
 					<Route path="/admin" element={<Admin />} />

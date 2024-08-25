@@ -44,6 +44,15 @@ export const getSubjects = async() =>{
 
   }
 }
+export const loginpage = async() =>{
+  try {
+    const response = await api.get("/LoginPage")
+    return response.data
+  } catch (error) {
+    console.error(error)
+
+  }
+}
 
 export const updateQuestion = async(id, question) =>{
   try {
@@ -71,6 +80,15 @@ export const saveStudent = async (studentData) => {
     return response.data;
   } catch (error) {
     console.error("Error saving student:", error);
+
+  }
+};
+export const saveAdmin = async (adminData) => {
+  try {
+    const response = await api.post("/admin/saveAdmin", adminData);
+    return response.data;
+  } catch (error) {
+    console.error("Error saving Admin:", error);
 
   }
 };

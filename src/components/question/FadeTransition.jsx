@@ -1,17 +1,21 @@
-
-import React from 'react';
+import React, { useRef } from 'react';
 import { CSSTransition } from 'react-transition-group';
-import './fadeTransition.css'; // Make sure to create this CSS file
 
-const FadeTransition = ({ in: inProp, children }) => (
-  <CSSTransition
-    in={inProp}
-    timeout={600}
-    classNames="fade"
-    unmountOnExit
-  >
-    {children}
-  </CSSTransition>
-);
+const FadeTransition = ({ in: inProp, children }) => {
+  const nodeRef = useRef(null);
+
+  return (
+    <CSSTransition
+      in={inProp}
+      timeout={300}
+      classNames="fade"
+      nodeRef={nodeRef}
+    >
+      <div ref={nodeRef}>
+        {children}
+      </div>
+    </CSSTransition>
+  );
+};
 
 export default FadeTransition;

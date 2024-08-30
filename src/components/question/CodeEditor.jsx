@@ -3,6 +3,7 @@ import axios from 'axios';
 import AceEditor from 'react-ace';
 import 'ace-builds/src-noconflict/mode-c_cpp'; // For C and C++
 import 'ace-builds/src-noconflict/theme-github'; // Choose a theme you like
+import 'ace-builds/src-noconflict/ext-language_tools'; // For autocomplete
 
 const CodeEditor = () => {
     const [sourceCode, setSourceCode] = useState('');
@@ -29,7 +30,13 @@ const CodeEditor = () => {
     };
 
     const handleEditorLoad = (editor) => {
-        // Disable copy and paste actions
+    
+        editor.setOptions({
+            enableBasicAutocompletion: true,
+            enableLiveAutocompletion: true
+        });
+
+     
         editor.commands.addCommand({
             name: 'disableCopyPaste',
             bindKey: { win: 'Ctrl+C', mac: 'Command+C' },
@@ -42,6 +49,9 @@ const CodeEditor = () => {
             exec: () => {},
             readOnly: true
         });
+
+        // Disable right-click context menu
+        editor.renderer.$cursorLayer.element.addEventListener('contextmenu', (e) => e.preventDefault());
     };
 
     return (
@@ -56,19 +66,18 @@ const CodeEditor = () => {
                 height="400px"
                 editorProps={{ $blockScrolling: true }}
                 style={{ borderRadius: '4px', border: '1px solid #ddd' }}
-                // onLoad={handleEditorLoad}
-                //It disable the copy-paste functionality
+              //  onLoad={handleEditorLoad}--> This method to disable the copy -paste
             />
             <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
                 <div style={{ display: 'flex', alignItems: 'center' }}>
-                    <label htmlFor="language" style={{ marginRight: '10px', fontWeight: 'bold' }}>Select Language:</label>
+                    <label htmlFor="language" style={{ marginRight: '10px', fontWeight: 'bold' }}>Language:</label>
                     <select
                         id="language"
                         value={language}
                         onChange={(e) => setLanguage(e.target.value)}
                         style={{ padding: '10px', fontSize: '16px', borderColor: '#ddd', borderRadius: '4px', flex: '1' }}
                     >
-                        <option value="c_cpp">C/C++</option>
+                        <option value="c_cpp">C</option>
                         {/* Add more options if needed */}
                     </select>
                 </div>

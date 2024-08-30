@@ -13,6 +13,7 @@ import Admin from "./components/Admin"
 import Register from "./components/question/Register"
 import LoginPage from "../utils/LoginPage"
 import Compiler from "./components/Compiler"
+import CodeEditor from "./components/question/CodeEditor"
 
 function App() {
 	return (
@@ -25,6 +26,7 @@ function App() {
 					<Route path="/quiz-stepper" element={<QuizStepper />} />
 					<Route path="/take-quiz" element={<Quiz />} />
 					<Route path="/admin" element={<Admin />} />
+					<Route path ="compiler" element={<CodeEditor/>} />
 					<Route path="/Register" element= {<Register />} />
 					<Route path="/compiler" element= {<Compiler />} />
 					<Route path="/create-quiz" element={<AddQuestion />} />

@@ -1,3 +1,4 @@
+ 
 import React, { useState } from 'react';
 import axios from 'axios';
 import AceEditor from 'react-ace';
@@ -37,18 +38,18 @@ const CodeEditor = () => {
         });
 
      
-        editor.commands.addCommand({
-            name: 'disableCopyPaste',
-            bindKey: { win: 'Ctrl+C', mac: 'Command+C' },
-            exec: () => {},
-            readOnly: true
-        });
-        editor.commands.addCommand({
-            name: 'disablePaste',
-            bindKey: { win: 'Ctrl+V', mac: 'Command+V' },
-            exec: () => {},
-            readOnly: true
-        });
+        // editor.commands.addCommand({
+        //     name: 'disableCopyPaste',
+        //     bindKey: { win: 'Ctrl+C', mac: 'Command+C' },
+        //     exec: () => {},
+        //     readOnly: true
+        // });
+        // editor.commands.addCommand({
+        //     name: 'disablePaste',
+        //     bindKey: { win: 'Ctrl+V', mac: 'Command+V' },
+        //     exec: () => {},
+        //     readOnly: true
+        // });
 
         // Disable right-click context menu
         editor.renderer.$cursorLayer.element.addEventListener('contextmenu', (e) => e.preventDefault());
@@ -66,7 +67,8 @@ const CodeEditor = () => {
                 height="400px"
                 editorProps={{ $blockScrolling: true }}
                 style={{ borderRadius: '4px', border: '1px solid #ddd' }}
-              //  onLoad={handleEditorLoad}--> This method to disable the copy -paste
+                onLoad={handleEditorLoad}
+                //--> This method to disable the copy -paste
             />
             <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
                 <div style={{ display: 'flex', alignItems: 'center' }}>

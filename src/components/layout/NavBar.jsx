@@ -47,6 +47,11 @@ const Navbar = () => {
 								Open Compiler
 							</NavLink>
 						</li>
+						<li className="nav-item">
+							<NavLink className="nav-link" to={"/addset"}>
+								Add New Set
+							</NavLink>
+						</li>
 					</ul>
 				</div>
 			</div>

@@ -14,6 +14,7 @@ import Register from "./components/question/Register"
 import LoginPage from "../utils/LoginPage"
 import Compiler from "./components/Compiler"
 import CodeEditor from "./components/question/CodeEditor"
+import QuestionSetForm from "./components/question/QuestionSetForm"
 
 function App() {
 	return (
@@ -33,6 +34,7 @@ function App() {
 					<Route path="/update-quiz/:id" element={<UpdateQuestion />} />
 					<Route path="/all-quizzes" element={<GetAllQuiz />} />
 					<Route path="/quiz-result" element={<QuizResult />} />
+					<Route path="/addset" element={<QuestionSetForm/>} />
 					
 				</Routes>
 			</Router>

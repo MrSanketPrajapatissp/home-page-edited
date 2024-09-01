@@ -15,6 +15,8 @@ import LoginPage from "../utils/LoginPage"
 import Compiler from "./components/Compiler"
 import CodeEditor from "./components/question/CodeEditor"
 import QuestionSetForm from "./components/question/QuestionSetForm"
+import Pallate from "./components/quiz/Question-Pallate"
+
 
 function App() {
 	return (
@@ -27,6 +29,7 @@ function App() {
 					<Route path="/quiz-stepper" element={<QuizStepper />} />
 					<Route path="/take-quiz" element={<Quiz />} />
 					<Route path="/admin" element={<Admin />} />
+					<Route path="/pallate" element={<Pallate />} />
 					<Route path ="compiler" element={<CodeEditor/>} />
 					<Route path="/Register" element= {<Register />} />
 					<Route path="/compiler" element= {<Compiler />} />

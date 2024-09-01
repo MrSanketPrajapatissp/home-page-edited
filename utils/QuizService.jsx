@@ -23,6 +23,28 @@ export const getAllQuestions = async() =>{
   }
 }
 
+
+// Get the coding Questions 
+export const Pallate = async() =>{
+  try {
+    const response = await api.get("/all-questions")
+    return response.data
+  } catch (error) {
+    console.error(error)
+    return []
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
 export const fetchQuizForUser = async(number, subject) =>{
   try {
     const response = await api.get(

@@ -52,6 +52,12 @@ const Navbar = () => {
 								Add New Set
 							</NavLink>
 						</li>
+
+						<li className="nav-item">
+							<NavLink className="nav-link" to={"/pallate"}>
+								Question Pallete
+							</NavLink>
+						</li>
 					</ul>
 				</div>
 			</div>

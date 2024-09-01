@@ -1,4 +1,3 @@
- 
 import React, { useState } from 'react';
 import axios from 'axios';
 import AceEditor from 'react-ace';
@@ -12,6 +11,12 @@ const CodeEditor = () => {
     const [userInput, setUserInput] = useState('');
     const [result, setResult] = useState('');
     const [loading, setLoading] = useState(false);
+    const [allTestsPassed, setAllTestsPassed] = useState(false); // New state for test case results
+
+    const testCases = [
+        { input: '2 3', expectedOutput: '5' },
+        { input: '10 5', expectedOutput: '15' },
+    ]; // Example test cases
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -23,96 +28,118 @@ const CodeEditor = () => {
                 userInput
             });
             setResult(response.data);
+            checkTestCases(response.data); // Pass result to checkTestCases
         } catch (error) {
             setResult(error.response?.data || 'An error occurred');
+            setAllTestsPassed(false); // Reset test case result on error
         } finally {
             setLoading(false);
         }
     };
 
     const handleEditorLoad = (editor) => {
-    
         editor.setOptions({
             enableBasicAutocompletion: true,
             enableLiveAutocompletion: true
         });
 
-     
-        // editor.commands.addCommand({
-        //     name: 'disableCopyPaste',
-        //     bindKey: { win: 'Ctrl+C', mac: 'Command+C' },
-        //     exec: () => {},
-        //     readOnly: true
-        // });
-        // editor.commands.addCommand({
-        //     name: 'disablePaste',
-        //     bindKey: { win: 'Ctrl+V', mac: 'Command+V' },
-        //     exec: () => {},
-        //     readOnly: true
-        // });
-
         // Disable right-click context menu
         editor.renderer.$cursorLayer.element.addEventListener('contextmenu', (e) => e.preventDefault());
     };
 
+    const checkTestCases = (result) => {
+        const allPassed = testCases.every(testCase => result.trim() === testCase.expectedOutput.trim());
+        setAllTestsPassed(allPassed);
+        if (allPassed) {
+            alert('All test cases passed!');
+        }
+    };
+
     return (
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '20px', padding: '20px', maxWidth: '1000px', margin: 'auto' }}>
-            <AceEditor
-                mode={language}
-                theme="github"
-                name="codeEditor"
-                value={sourceCode}
-                onChange={(newValue) => setSourceCode(newValue)}
-                width="100%"
-                height="400px"
-                editorProps={{ $blockScrolling: true }}
-                style={{ borderRadius: '4px', border: '1px solid #ddd' }}
-                onLoad={handleEditorLoad}
-                //--> This method to disable the copy -paste
-            />
-            <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-                <div style={{ display: 'flex', alignItems: 'center' }}>
-                    <label htmlFor="language" style={{ marginRight: '10px', fontWeight: 'bold' }}>Language:</label>
-                    <select
-                        id="language"
-                        value={language}
-                        onChange={(e) => setLanguage(e.target.value)}
-                        style={{ padding: '10px', fontSize: '16px', borderColor: '#ddd', borderRadius: '4px', flex: '1' }}
-                    >
-                        <option value="c_cpp">C</option>
-                        {/* Add more options if needed */}
-                    </select>
-                </div>
-                <textarea
-                    value={userInput}
-                    onChange={(e) => setUserInput(e.target.value)}
-                    placeholder="Enter input for your program (if any)"
-                    rows="4"
-                    style={{ width: '100%', padding: '10px', fontSize: '16px', borderColor: '#ddd', borderRadius: '4px' }}
+        <div style={{ display: 'flex', padding: '20px', maxWidth: '1200px', margin: 'auto' }}>
+            {/* Left Column for Question and Details */}
+            <div style={{ flex: '1', marginRight: '20px', borderRight: '1px solid #ddd', paddingRight: '20px' }}>
+                <h2>Question Title</h2>
+                <p>Description of the problem goes here. It explains what the user needs to solve, including any constraints.</p>
+                <h3>Sample Input</h3>
+                <pre>2 3</pre>
+                <h3>Sample Output</h3>
+                <pre>5</pre>
+                <h3>Test Cases</h3>
+                {testCases.map((testCase, index) => (
+                    <div key={index}>
+                        <strong>Input:</strong> {testCase.input}<br />
+                        <strong>Expected Output:</strong> {testCase.expectedOutput}
+                    </div>
+                ))}
+            </div>
+
+            {/* Right Column for Code Editor and Output */}
+            <div style={{ flex: '2', display: 'flex', flexDirection: 'column', gap: '20px' }}>
+                <AceEditor
+                    mode={language}
+                    theme="github"
+                    name="codeEditor"
+                    value={sourceCode}
+                    onChange={(newValue) => setSourceCode(newValue)}
+                    width="100%"
+                    height="400px"
+                    editorProps={{ $blockScrolling: true }}
+                    style={{ borderRadius: '4px', border: '1px solid #ddd' }}
+                    onLoad={handleEditorLoad}
                 />
-                <button
-                    type="submit"
-                    style={{
-                        padding: '10px 20px',
-                        fontSize: '16px',
-                        cursor: 'pointer',
-                        backgroundColor: '#007BFF',
-                        color: '#fff',
-                        border: 'none',
-                        borderRadius: '4px',
-                        boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
-                        transition: 'background-color 0.3s',
-                        marginTop: '10px'
-                    }}
-                    onMouseOver={(e) => e.currentTarget.style.backgroundColor = '#0056b3'}
-                    onMouseOut={(e) => e.currentTarget.style.backgroundColor = '#007BFF'}
-                >
-                    {loading ? 'Compiling...' : 'Compile'}
-                </button>
-            </form>
-            <div style={{ marginTop: '20px', whiteSpace: 'pre-wrap', border: '1px solid #ddd', padding: '10px', backgroundColor: '#f9f9f9', borderRadius: '4px' }}>
-                <h2 style={{ margin: '0 0 10px', fontSize: '18px', fontWeight: 'bold' }}>Output:</h2>
-                <pre>{result}</pre>
+                <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                    <div style={{ display: 'flex', alignItems: 'center' }}>
+                        <label htmlFor="language" style={{ marginRight: '10px', fontWeight: 'bold' }}>Language:</label>
+                        <select
+                            id="language"
+                            value={language}
+                            onChange={(e) => setLanguage(e.target.value)}
+                            style={{ padding: '10px', fontSize: '16px', borderColor: '#ddd', borderRadius: '4px', flex: '1' }}
+                        >
+                            <option value="c_cpp">C</option>
+                        </select>
+                    </div>
+                    <textarea
+                        value={userInput}
+                        onChange={(e) => setUserInput(e.target.value)}
+                        placeholder="Enter input for your program (if any)"
+                        rows="4"
+                        style={{ width: '100%', padding: '10px', fontSize: '16px', borderColor: '#ddd', borderRadius: '4px' }}
+                    />
+                    <button
+                        type="submit"
+                        style={{
+                            padding: '10px 20px',
+                            fontSize: '16px',
+                            cursor: 'pointer',
+                            backgroundColor: '#007BFF',
+                            color: '#fff',
+                            border: 'none',
+                            borderRadius: '4px',
+                            boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
+                            transition: 'background-color 0.3s',
+                            marginTop: '10px'
+                        }}
+                        onMouseOver={(e) => e.currentTarget.style.backgroundColor = '#0056b3'}
+                        onMouseOut={(e) => e.currentTarget.style.backgroundColor = '#007BFF'}
+                    >
+                        {loading ? 'Compiling...' : 'Compile'}
+                    </button>
+                </form>
+                <div style={{ marginTop: '20px', whiteSpace: 'pre-wrap', border: '1px solid #ddd', padding: '10px', backgroundColor: '#f9f9f9', borderRadius: '4px' }}>
+                    <h2 style={{ margin: '0 0 10px', fontSize: '18px', fontWeight: 'bold' }}>Output:</h2>
+                    <pre>{result}</pre>
+                    <h3>Test Case Results:</h3>
+                    {testCases.map((testCase, index) => {
+                        const passed = result.trim() === testCase.expectedOutput.trim();
+                        return (
+                            <div key={index} style={{ color: passed ? 'green' : 'red' }}>
+                                Test Case {index + 1}: {passed ? 'Passed' : 'Failed'}
+                            </div>
+                        );
+                    })}
+                </div>
             </div>
         </div>
     );

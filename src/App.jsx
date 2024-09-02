@@ -16,6 +16,7 @@ import Compiler from "./components/Compiler"
 import CodeEditor from "./components/question/CodeEditor"
 import QuestionSetForm from "./components/question/QuestionSetForm"
 import Pallate from "./components/quiz/Question-Pallate"
+import AddCodingQuestion from "./components/question/AddCodingQuestion"
 
 
 function App() {
@@ -38,6 +39,7 @@ function App() {
 					<Route path="/all-quizzes" element={<GetAllQuiz />} />
 					<Route path="/quiz-result" element={<QuizResult />} />
 					<Route path="/addset" element={<QuestionSetForm/>} />
+					<Route path="/addcq" element={<AddCodingQuestion/>} />
 					
 				</Routes>
 			</Router>

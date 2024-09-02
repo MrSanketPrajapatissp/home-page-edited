@@ -58,6 +58,11 @@ const Navbar = () => {
 								Question Pallete
 							</NavLink>
 						</li>
+						<li className="nav-item">
+							<NavLink className="nav-link" to={"/addcq"}>
+								AddCodingQ
+							</NavLink>
+						</li>
 					</ul>
 				</div>
 			</div>

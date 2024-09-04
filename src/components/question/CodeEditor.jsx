@@ -44,39 +44,39 @@ const CodeEditor = () => {
         });
          // UmComment this code to disable the copy and paste
         // Disable right-click context menu
-       // editor.container.addEventListener('contextmenu', (e) => e.preventDefault());
+       editor.container.addEventListener('contextmenu', (e) => e.preventDefault());
 
-        // Disable copy, cut, and paste via keydown and keypress events
-        // editor.container.addEventListener('keydown', (e) => {
-        //     if ((e.ctrlKey || e.metaKey) && (e.key === 'c' || e.key === 'x' || e.key === 'v')) {
-        //         e.preventDefault();
-        //     }
-        // });
+     //   Disable copy, cut, and paste via keydown and keypress events
+        editor.container.addEventListener('keydown', (e) => {
+            if ((e.ctrlKey || e.metaKey) && (e.key === 'c' || e.key === 'x' || e.key === 'v')) {
+                e.preventDefault();
+            }
+        });
 
-        // editor.container.addEventListener('keypress', (e) => {
-        //     if ((e.ctrlKey || e.metaKey) && (e.key === 'c' || e.key === 'x' || e.key === 'v')) {
-        //         e.preventDefault();
-        //     }
-        // });
+        editor.container.addEventListener('keypress', (e) => {
+            if ((e.ctrlKey || e.metaKey) && (e.key === 'c' || e.key === 'x' || e.key === 'v')) {
+                e.preventDefault();
+            }
+        });
 
-        // // Additionally, disable copy, cut, and paste via the editor's commands
-        // editor.commands.addCommand({
-        //     name: 'disableCopy',
-        //     bindKey: { win: 'Ctrl-C', mac: 'Command-C' },
-        //     exec: () => {},
-        // });
+        // Additionally, disable copy, cut, and paste via the editor's commands
+        editor.commands.addCommand({
+            name: 'disableCopy',
+            bindKey: { win: 'Ctrl-C', mac: 'Command-C' },
+            exec: () => {},
+        });
 
-        // editor.commands.addCommand({
-        //     name: 'disableCut',
-        //     bindKey: { win: 'Ctrl-X', mac: 'Command-X' },
-        //     exec: () => {},
-        // });
+        editor.commands.addCommand({
+            name: 'disableCut',
+            bindKey: { win: 'Ctrl-X', mac: 'Command-X' },
+            exec: () => {},
+        });
 
-        // editor.commands.addCommand({
-        //     name: 'disablePaste',
-        //     bindKey: { win: 'Ctrl-V', mac: 'Command-V' },
-        //     exec: () => {},
-        // });
+        editor.commands.addCommand({
+            name: 'disablePaste',
+            bindKey: { win: 'Ctrl-V', mac: 'Command-V' },
+            exec: () => {},
+        });
     };
 
     const checkTestCases = (result) => {

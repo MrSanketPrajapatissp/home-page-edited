@@ -17,6 +17,7 @@ import CodeEditor from "./components/question/CodeEditor"
 import QuestionSetForm from "./components/question/QuestionSetForm"
 import Pallate from "./components/quiz/Question-Pallate"
 import AddCodingQuestion from "./components/question/AddCodingQuestion"
+import AdminLogin from "./admin/Admin_Login"
 
 
 function App() {
@@ -40,7 +41,7 @@ function App() {
 					<Route path="/quiz-result" element={<QuizResult />} />
 					<Route path="/addset" element={<QuestionSetForm/>} />
 					<Route path="/addcq" element={<AddCodingQuestion/>} />
-					
+					<Route path="/adminLogin" element={<AdminLogin/>} />
 				</Routes>
 			</Router>
 		</main>

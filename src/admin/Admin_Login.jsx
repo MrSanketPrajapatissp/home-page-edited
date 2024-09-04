@@ -1,26 +1,26 @@
 import React, { useState } from "react";
 import axios from "axios";
 import styled from "styled-components";
-import { useNavigate } from "react-router-dom"; 
+import { useNavigate } from "react-router-dom"; // Import useNavigate hook
 
-const Login = () => {
+const AdminLogin = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
-  const navigate = useNavigate(); 
+  const navigate = useNavigate(); // Initialize the useNavigate hook
 
   const handleSubmit = async (e) => {
     e.preventDefault();
   
     try {
-      const response = await axios.post("http://localhost:8080/student/logins", {
+      const response = await axios.post("http://localhost:8080/admin/loginAdmin", {
         email,
-        password,
+        admin_password: password, 
       });
   
       if (response.status === 200) {
         alert("Login Successful");
-        navigate("/"); 
+        navigate("/admin"); 
       }
     } catch (err) {
       if (err.response && err.response.status === 401) {
@@ -35,7 +35,7 @@ const Login = () => {
   return (
     <StyledWrapper>
       <div className="container">
-        <div className="heading">Sign In</div>
+        <div className="heading">Faculty Sign In</div>
         <form className="form" onSubmit={handleSubmit}>
           <input
             placeholder="E-mail"
@@ -63,7 +63,7 @@ const Login = () => {
           <input value="Sign In" type="submit" className="login-button" />
         </form>
         {error && <p style={{ color: "red" }}>{error}</p>}
-
+        
         <span className="agreement">
           <a href="#">Learn user licence agreement</a>
         </span>
@@ -72,7 +72,6 @@ const Login = () => {
   );
 };
 
-// Styled components remain the same...
 
 const StyledWrapper = styled.div`
   display: flex;
@@ -166,4 +165,4 @@ const StyledWrapper = styled.div`
 `;
 
 
-export default Login;
+export default AdminLogin;

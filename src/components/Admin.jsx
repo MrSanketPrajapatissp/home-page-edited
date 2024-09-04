@@ -7,6 +7,10 @@ const Admin = () => {
 			<h2 className="mt-5">Welcome to admin home page</h2>
 			<hr />
 			<nav className="nav flex-column">
+
+			<Link to={"/adminLogin"} className="nav-link">
+					AdminLogin
+				</Link>
 				<Link to={"/create-quiz"} className="nav-link">
 					Create a New Quiz
 				</Link>

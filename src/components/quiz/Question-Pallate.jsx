@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { getAllQuestions } from "../../../utils/QuizService";
+import { getQuestionsBySetId } from "../../../utils/QuizService";
 import { Link, useNavigate } from "react-router-dom";
 import { FaPlus } from "react-icons/fa";
 import styled from "styled-components";
@@ -9,18 +9,33 @@ const Pallate = () => {
   const [selectedQuestion, setSelectedQuestion] = useState("");
   const [selectedQuestionId, setSelectedQuestionId] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
   const navigate = useNavigate();
+  const [questionSetId, setQuestionSetId] = useState("");
 
   useEffect(() => {
-    fetchQuestions();
+    promptForSetId();
   }, []);
 
-  const fetchQuestions = async () => {
+  const promptForSetId = () => {
+    const id = prompt("Please enter the question set ID:");
+    if (id) {
+      setQuestionSetId(id);
+      fetchQuestions(id);
+    } else {
+      setError("No question set ID provided.");
+      setIsLoading(false);
+    }
+  };
+
+  const fetchQuestions = async (id) => {
+    setIsLoading(true);
     try {
-      const data = await getAllQuestions();
+      const data = await getQuestionsBySetId(id);
       setQuestions(data);
       setIsLoading(false);
     } catch (error) {
+      setError("Error fetching questions. Please try again later.");
       console.error(error);
     }
   };
@@ -48,6 +63,7 @@ const Pallate = () => {
           <FaPlus /> Add Question
         </Link>
       </div>
+      {error && <p className="error-message">{error}</p>}
       <div className="question-container">
         <textarea
           className="question-details"
@@ -65,11 +81,11 @@ const Pallate = () => {
       <div className="grid-container">
         {questions.map((question) => (
           <button
-            key={question.id}
+            key={`${question.questionSetId}-${question.questionNo}`} // Ensure uniqueness of key
             className="question-button"
-            onClick={() => handleQuestionClick(question.question, question.id)}
+            onClick={() => handleQuestionClick(question.question, `${question.questionSetId}-${question.questionNo}`)}
           >
-            {question.id}
+            {question.questionNo}
           </button>
         ))}
       </div>
@@ -101,6 +117,11 @@ const StyledSection = styled.section`
     a svg {
       margin-right: 8px;
     }
+  }
+
+  .error-message {
+    color: red;
+    margin-bottom: 20px;
   }
 
   .question-container {

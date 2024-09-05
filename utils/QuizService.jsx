@@ -4,6 +4,10 @@ export const api = axios.create({
 	baseURL: "http://localhost:8080/api/quizzes"
 })
 
+export const api1 = axios.create({
+  baseURL : "http://localhost:8080/codingQuestions"
+})
+
 export const createQuestion = async(quizQustion) =>{
   try {
     const response = await api.post("/create-new-question", quizQustion)
@@ -22,6 +26,21 @@ export const getAllQuestions = async() =>{
     return []
   }
 }
+
+
+
+
+export const getQuestionsBySetId = async (questionSetId) => {
+  try {
+    const response = await api1.get("/allCodingQuestions", {
+      params: { questionSetId }
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching questions:", error);
+    throw error; // Rethrow to handle it in the component
+  }
+};
 
 
 // Get the coding Questions 

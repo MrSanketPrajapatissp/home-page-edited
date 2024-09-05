@@ -1,121 +1,84 @@
-import React, { useEffect, useState } from "react";
-import { getQuestionsBySetId } from "../../../utils/QuizService";
-import { Link, useNavigate } from "react-router-dom";
-import { FaPlus } from "react-icons/fa";
-import styled from "styled-components";
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+import styled from 'styled-components';
+import { useNavigate } from 'react-router-dom'; // Import useNavigate
 
-const Pallate = () => {
-  const [questions, setQuestions] = useState([]);
-  const [selectedQuestion, setSelectedQuestion] = useState("");
-  const [selectedQuestionId, setSelectedQuestionId] = useState(null);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState(null);
-  const navigate = useNavigate();
-  const [questionSetId, setQuestionSetId] = useState("");
+const Pallate = ({ questionSetId }) => {
+    const [questions, setQuestions] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+    const [selectedQuestion, setSelectedQuestion] = useState('');
+    const navigate = useNavigate(); // Initialize useNavigate
 
-  useEffect(() => {
-    promptForSetId();
-  }, []);
+    useEffect(() => {
+        const fetchQuestions = async () => {
+            try {
+                const response = await axios.get('http://localhost:8080/codingQuestions/allCodingQuestions', {
+                    params: {
+                        questionSetId: questionSetId || 'BTCOCOC505' // Use the prop or default value
+                    }
+                });
+                setQuestions(response.data);
+            } catch (err) {
+                setError(err);
+            } finally {
+                setLoading(false);
+            }
+        };
 
-  const promptForSetId = () => {
-    const id = prompt("Please enter the question set ID:");
-    if (id) {
-      setQuestionSetId(id);
-      fetchQuestions(id);
-    } else {
-      setError("No question set ID provided.");
-      setIsLoading(false);
-    }
-  };
+        fetchQuestions();
+    }, [questionSetId]);
 
-  const fetchQuestions = async (id) => {
-    setIsLoading(true);
-    try {
-      const data = await getQuestionsBySetId(id);
-      setQuestions(data);
-      setIsLoading(false);
-    } catch (error) {
-      setError("Error fetching questions. Please try again later.");
-      console.error(error);
-    }
-  };
+    const handleQuestionClick = (question) => {
+        setSelectedQuestion(question);
+    };
 
-  const handleQuestionClick = (question, id) => {
-    setSelectedQuestion(question);
-    setSelectedQuestionId(id);
-  };
+    const handleSolveClick = () => {
+        navigate('/compiler'); // Navigate to /compiler
+    };
 
-  const handleSolveClick = () => {
-    if (selectedQuestionId !== null) {
-      navigate(`/compiler/${selectedQuestionId}`);
-    }
-  };
+    if (loading) return <p>Loading...</p>;
+    if (error) return <p>Error fetching questions: {error.message}</p>;
 
-  if (isLoading) {
-    return <p>Loading...</p>;
-  }
-
-  return (
-    <StyledSection>
-      <div className="header">
-        <h4>All Quiz Questions</h4>
-        <Link to={"/create-quiz"}>
-          <FaPlus /> Add Question
-        </Link>
-      </div>
-      {error && <p className="error-message">{error}</p>}
-      <div className="question-container">
-        <textarea
-          className="question-details"
-          value={selectedQuestion}
-          readOnly
-        />
-        <button
-          className="solve-button"
-          onClick={handleSolveClick}
-          disabled={selectedQuestionId === null}
-        >
-          Solve Question
-        </button>
-      </div>
-      <div className="grid-container">
-        {questions.map((question) => (
-          <button
-            key={`${question.questionSetId}-${question.questionNo}`} // Ensure uniqueness of key
-            className="question-button"
-            onClick={() => handleQuestionClick(question.question, `${question.questionSetId}-${question.questionNo}`)}
-          >
-            {question.questionNo}
-          </button>
-        ))}
-      </div>
-    </StyledSection>
-  );
+    return (
+        <StyledSection>
+            <div className="header">
+                <h4>50 QUESTIONS OF C</h4>
+            </div>
+            {error && <p className="error-message">{error.message}</p>}
+            <div className="text-area-container">
+                <textarea
+                    className="question-textarea"
+                    value={selectedQuestion}
+                    readOnly
+                />
+                <button className="solve-button" onClick={handleSolveClick}>
+                    Solve
+                </button>
+            </div>
+            <div className="grid-container">
+                {questions.map((question, index) => (
+                    <button
+                        key={index}
+                        className="question-button"
+                        onClick={() => handleQuestionClick(question)} // Update selected question on click
+                    >
+                        {index + 1}
+                    </button>
+                ))}
+            </div>
+        </StyledSection>
+    );
 };
 
 const StyledSection = styled.section`
   padding: 20px;
 
   .header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
     margin-bottom: 20px;
 
     h4 {
       color: GrayText;
-    }
-
-    a {
-      font-size: 1.2em;
-      color: #007bff;
-      text-decoration: none;
-      display: flex;
-      align-items: center;
-    }
-
-    a svg {
-      margin-right: 8px;
     }
   }
 
@@ -124,37 +87,39 @@ const StyledSection = styled.section`
     margin-bottom: 20px;
   }
 
-  .question-container {
+  .text-area-container {
     margin-bottom: 20px;
-  }
+    font-size: 1.25em; 
+    font-weight: bold; 
+}
 
-  .question-details {
+  .question-textarea {
     width: 100%;
     height: 100px;
     padding: 10px;
+    border: 1px solid #ddd;
     border-radius: 5px;
-    border: 1px solid #ced4da;
-    font-size: 1em;
     resize: none;
-    margin-bottom: 10px;
+    font-size: 1em;
   }
 
   .solve-button {
-    background-color: #007bff;
+    display: block;
+    padding: 15px 49%; /* Smaller button */
+    margin-top: 10px;
+    background-color: #007bff; /* Blue color */
     color: white;
     border: none;
     border-radius: 5px;
-    padding: 10px;
-    font-size: 1em;
+    font-size: 0.8em; /* Smaller font size */
     cursor: pointer;
-    text-align: center;
-    margin-bottom: 20px;
   }
+    .solve-button:hover {
+      background-color: green;
+    
+    }
 
-  .solve-button:disabled {
-    background-color: #cccccc;
-    cursor: not-allowed;
-  }
+ 
 
   .grid-container {
     display: grid;

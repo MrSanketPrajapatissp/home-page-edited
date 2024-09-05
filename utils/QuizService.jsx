@@ -30,17 +30,17 @@ export const getAllQuestions = async() =>{
 
 
 
-export const getQuestionsBySetId = async (questionSetId) => {
-  try {
-    const response = await api1.get("/allCodingQuestions", {
-      params: { questionSetId }
-    });
-    return response.data;
-  } catch (error) {
-    console.error("Error fetching questions:", error);
-    throw error; // Rethrow to handle it in the component
-  }
-};
+// export const getQuestionsBySetId = async (questionSetId) => {
+//   try {
+//     const response = await api1.get("/allCodingQuestions", {
+//       params: { questionSetId }
+//     });
+//     return response.data;
+//   } catch (error) {
+//     console.error("Error fetching questions:", error);
+//     throw error; // Rethrow to handle it in the component
+//   }
+// };
 
 
 // Get the coding Questions 

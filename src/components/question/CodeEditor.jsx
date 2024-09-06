@@ -11,80 +11,56 @@ const CodeEditor = () => {
     const [userInput, setUserInput] = useState('');
     const [result, setResult] = useState('');
     const [loading, setLoading] = useState(false);
-    const [allTestsPassed, setAllTestsPassed] = useState(false); // New state for test case results
 
     const testCases = [
-        { input: '2 3', expectedOutput: '5' },
-        { input: '10 5', expectedOutput: '15' },
+        { input: '', expectedOutput: 'hello' },
+        //  { input: '', expectedOutput: '15' },
     ]; // Example test cases
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        setLoading(true);
-        try {
-            const response = await axios.post('http://localhost:8080/api/compiler/compile', {
-                sourceCode,
-                language: language === 'c_cpp' ? 'C++' : 'C',
-                userInput
-            });
-            setResult(response.data);
-            checkTestCases(response.data); // Pass result to checkTestCases
-        } catch (error) {
-            setResult(error.response?.data || 'An error occurred');
-            setAllTestsPassed(false); // Reset test case result on error
-        } finally {
-            setLoading(false);
+    const checkTestCases = (result) => {
+    let allPassed = true;
+
+    for (const testCase of testCases) {
+        // Compare raw result with the expected output
+        if (result.trim() !== testCase.expectedOutput.trim()) {
+            allPassed = false;
+            break;
         }
-    };
+    }
+
+    if (allPassed) {
+        alert('All test cases passed');
+    } else {
+        alert('Some test cases failed');
+    }
+};
+
+const handleSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    try {
+        const response = await axios.post('http://localhost:8080/api/compiler/compile', {
+            sourceCode,
+            language: language === 'c_cpp' ? 'C++' : 'C',
+            userInput
+        });
+        const resultData = response.data;
+        setResult(resultData);
+        checkTestCases(resultData); // Pass result to checkTestCases
+    } catch (error) {
+        console.error("Error occurred:", error);
+        setResult(error.response?.data || 'An error occurred');
+    } finally {
+        setLoading(false);
+    }
+};
+
 
     const handleEditorLoad = (editor) => {
         editor.setOptions({
             enableBasicAutocompletion: true,
             enableLiveAutocompletion: true
         });
-         // UmComment this code to disable the copy and paste
-        // Disable right-click context menu
-       editor.container.addEventListener('contextmenu', (e) => e.preventDefault());
-
-     //   Disable copy, cut, and paste via keydown and keypress events
-        editor.container.addEventListener('keydown', (e) => {
-            if ((e.ctrlKey || e.metaKey) && (e.key === 'c' || e.key === 'x' || e.key === 'v')) {
-                e.preventDefault();
-            }
-        });
-
-        editor.container.addEventListener('keypress', (e) => {
-            if ((e.ctrlKey || e.metaKey) && (e.key === 'c' || e.key === 'x' || e.key === 'v')) {
-                e.preventDefault();
-            }
-        });
-
-        // Additionally, disable copy, cut, and paste via the editor's commands
-        editor.commands.addCommand({
-            name: 'disableCopy',
-            bindKey: { win: 'Ctrl-C', mac: 'Command-C' },
-            exec: () => {},
-        });
-
-        editor.commands.addCommand({
-            name: 'disableCut',
-            bindKey: { win: 'Ctrl-X', mac: 'Command-X' },
-            exec: () => {},
-        });
-
-        editor.commands.addCommand({
-            name: 'disablePaste',
-            bindKey: { win: 'Ctrl-V', mac: 'Command-V' },
-            exec: () => {},
-        });
-    };
-
-    const checkTestCases = (result) => {
-        const allPassed = testCases.every(testCase => result.trim() === testCase.expectedOutput.trim());
-        setAllTestsPassed(allPassed);
-        if (allPassed) {
-            alert('All test cases passed!');
-        }
     };
 
     return (
@@ -162,15 +138,6 @@ const CodeEditor = () => {
                 <div style={{ marginTop: '20px', whiteSpace: 'pre-wrap', border: '1px solid #ddd', padding: '10px', backgroundColor: '#f9f9f9', borderRadius: '4px' }}>
                     <h2 style={{ margin: '0 0 10px', fontSize: '18px', fontWeight: 'bold' }}>Output:</h2>
                     <pre>{result}</pre>
-                    <h3>Test Case Results:</h3>
-                    {testCases.map((testCase, index) => {
-                        const passed = result.trim() === testCase.expectedOutput.trim();
-                        return (
-                            <div key={index} style={{ color: passed ? 'green' : 'red' }}>
-                                Test Case {index + 1}: {passed ? 'Passed' : 'Failed'}
-                            </div>
-                        );
-                    })}
                 </div>
             </div>
         </div>

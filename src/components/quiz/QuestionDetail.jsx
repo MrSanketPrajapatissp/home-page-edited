@@ -48,19 +48,55 @@ const QuestionDetail = () => {
       setLoading(false);
     }
   };
-
   const checkTestCases = (result) => {
-    if (questionData && questionData.test_case_output) {
-      if (result.trim() === questionData.test_case_output.trim()) {
-        alert('Output matched');
+    if (questionData) {
+      const { test_case_output, test_case_input } = questionData;
+  
+      if (test_case_output && test_case_input) {
+        // Split the test case inputs and outputs into arrays if multiple cases exist
+        const testCaseInputs = test_case_input.split('|').map(input => input.trim());
+        const testCaseOutputs = test_case_output.split('|').map(output => output.trim());
+  
+        let allTestsPassed = true;
+  
+        // Convert result to string and trim whitespace
+        const resultString = String(result).trim();
+  
+        // Check user input against all test case inputs
+        if (testCaseInputs.includes(userInput.trim())) {
+          console.log('User input matches one of the test case inputs');
+        } else {
+          console.log('User input does not match any of the test case inputs');
+          allTestsPassed = false;
+        }
+  
+        // Check result against all test case outputs
+        for (let i = 0; i < testCaseOutputs.length; i++) {
+          const expectedOutput = testCaseOutputs[i];
+          const normalizedExpectedOutput = expectedOutput.replace(/\r\n|\r|\n/g, '\n'); // Normalize newlines
+          const normalizedResultString = resultString.replace(/\r\n|\r|\n/g, '\n'); // Normalize newlines
+  
+          if (normalizedExpectedOutput === normalizedResultString) {
+            console.log(`Output matched for test case ${i + 1}`);
+          } else {
+            console.log(`Output did not match for test case ${i + 1}`);
+            allTestsPassed = false;
+          }
+        }
+  
+        if (allTestsPassed) {
+          alert('All test cases passed');
+        } else {
+          alert('Some test cases did not pass');
+        }
       } else {
-        alert('Output did not match');
+        alert('Test case input or output not available');
       }
     } else {
-      alert('Test case output not available');
+      alert('Question data not available');
     }
   };
-
+  
   const handleEditorLoad = (editor) => {
     editor.setOptions({
       enableBasicAutocompletion: true,

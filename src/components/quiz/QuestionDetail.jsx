@@ -48,34 +48,31 @@ const QuestionDetail = () => {
       setLoading(false);
     }
   };
+
   const checkTestCases = (result) => {
     if (questionData) {
       const { test_case_output, test_case_input } = questionData;
-  
+
       if (test_case_output && test_case_input) {
-        // Split the test case inputs and outputs into arrays if multiple cases exist
         const testCaseInputs = test_case_input.split('|').map(input => input.trim());
         const testCaseOutputs = test_case_output.split('|').map(output => output.trim());
-  
+
         let allTestsPassed = true;
-  
-        // Convert result to string and trim whitespace
+
         const resultString = String(result).trim();
-  
-        // Check user input against all test case inputs
+
         if (testCaseInputs.includes(userInput.trim())) {
           console.log('User input matches one of the test case inputs');
         } else {
           console.log('User input does not match any of the test case inputs');
           allTestsPassed = false;
         }
-  
-        // Check result against all test case outputs
+
         for (let i = 0; i < testCaseOutputs.length; i++) {
           const expectedOutput = testCaseOutputs[i];
-          const normalizedExpectedOutput = expectedOutput.replace(/\r\n|\r|\n/g, '\n'); // Normalize newlines
-          const normalizedResultString = resultString.replace(/\r\n|\r|\n/g, '\n'); // Normalize newlines
-  
+          const normalizedExpectedOutput = expectedOutput.replace(/\r\n|\r|\n/g, '\n');
+          const normalizedResultString = resultString.replace(/\r\n|\r|\n/g, '\n');
+
           if (normalizedExpectedOutput === normalizedResultString) {
             console.log(`Output matched for test case ${i + 1}`);
           } else {
@@ -83,7 +80,7 @@ const QuestionDetail = () => {
             allTestsPassed = false;
           }
         }
-  
+
         if (allTestsPassed) {
           alert('All test cases passed');
         } else {
@@ -96,7 +93,7 @@ const QuestionDetail = () => {
       alert('Question data not available');
     }
   };
-  
+
   const handleEditorLoad = (editor) => {
     editor.setOptions({
       enableBasicAutocompletion: true,
@@ -116,13 +113,13 @@ const QuestionDetail = () => {
             <p><strong>Question No:</strong> {questionData.questionNo}</p>
             <p><strong>Question:</strong> {questionData.question}</p>
             {questionData.question_description && (
-              <p><strong>Description:</strong> {questionData.question_description}</p>
+              <p><strong>Description:</strong> <pre>{questionData.question_description}</pre></p>
             )}
             {questionData.test_case_input && (
-              <p><strong>Test Case Input:</strong> {questionData.test_case_input}</p>
+              <p><strong>Test Case Input:</strong> <pre>{questionData.test_case_input}</pre></p>
             )}
             {questionData.test_case_output && (
-              <p><strong>Test Case Output:</strong> {questionData.test_case_output}</p>
+              <p><strong>Test Case Output:</strong> <pre>{questionData.test_case_output}</pre></p>
             )}
           </div>
         ) : (
